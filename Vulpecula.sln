@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Vulpecula", "Vulpecula\Vulpecula.fsproj", "{D76A3033-62F9-42E4-82F1-709E246CC57D}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Producer", "Producer\Producer.fsproj", "{2F808A07-BF3D-4EEB-913A-602C6A0DA71A}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Consumer", "Consumer\Consumer.fsproj", "{829CC014-637D-479C-BAFA-7C7BB1A5104C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{D76A3033-62F9-42E4-82F1-709E246CC57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D76A3033-62F9-42E4-82F1-709E246CC57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76A3033-62F9-42E4-82F1-709E246CC57D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F808A07-BF3D-4EEB-913A-602C6A0DA71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F808A07-BF3D-4EEB-913A-602C6A0DA71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F808A07-BF3D-4EEB-913A-602C6A0DA71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F808A07-BF3D-4EEB-913A-602C6A0DA71A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829CC014-637D-479C-BAFA-7C7BB1A5104C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829CC014-637D-479C-BAFA-7C7BB1A5104C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829CC014-637D-479C-BAFA-7C7BB1A5104C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829CC014-637D-479C-BAFA-7C7BB1A5104C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
