@@ -1,8 +1,19 @@
 ﻿// Learn more about F# at http://fsharp.org
 
-open System
+open DotPulsar
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
+    let options = ProducerOptions("")
+
+    let client =
+        PulsarClient.Builder().Build().CreateProducer(options)
+
+    client.Send([||]).AsTask()
+    |> Async.AwaitTask
+    |> Async.RunSynchronously
+    |> fun m -> m.EntryId
+    |> printfn "%d"
+    |> ignore
+
     0 // return an integer exit code
