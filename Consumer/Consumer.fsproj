@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="DotPulsar" Version="0.9.6" />
+      <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.0.3" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
