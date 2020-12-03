@@ -2,12 +2,14 @@
 
 open FSharp.Control
 open DotPulsar
+open Vulpecula
 
 let printMessage (message: Message) = message.Data.ToString() |> printfn "%s"
 
 [<EntryPoint>]
 let main argv =
-    let options = ConsumerOptions("", "")
+    let options =
+        ConsumerOptions(Constants.SubscriptionName, Constants.Topic)
 
     let client =
         PulsarClient.Builder().Build().CreateConsumer(options)

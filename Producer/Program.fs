@@ -2,10 +2,11 @@
 
 open System.Text
 open DotPulsar
+open Vulpecula
 
 [<EntryPoint>]
 let main argv =
-    let options = ProducerOptions("")
+    let options = ProducerOptions(Constants.Topic)
 
     let client =
         PulsarClient.Builder().Build().CreateProducer(options)
