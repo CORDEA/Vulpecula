@@ -1,7 +1,7 @@
 module Vulpecula.Constants
 
 [<Literal>]
-let SubscriptionName = ""
+let SubscriptionName = "Subscription"
 
 [<Literal>]
-let Topic = ""
+let Topic = "persistent://public/default/mytopic"
