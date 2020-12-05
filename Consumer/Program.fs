@@ -10,10 +10,17 @@ let printMessage (message: Message) =
     |> (fun d -> EncodingExtensions.GetString(Encoding.UTF8, &d))
     |> printfn "%s"
 
-[<EntryPoint>]
-let main argv =
+let run (mode: string) =
+    let mode =
+        match mode with
+        | "exclusive" -> SubscriptionType.Exclusive
+        | "failover" -> SubscriptionType.Failover
+        | "shared" -> SubscriptionType.Shared
+
     let options =
         ConsumerOptions(Constants.SubscriptionName, Constants.Topic)
+
+    options.SubscriptionType <- mode
 
     let client =
         PulsarClient.Builder().Build().CreateConsumer(options)
@@ -24,4 +31,7 @@ let main argv =
     |> AsyncSeq.toArraySynchronously
     |> ignore
 
+[<EntryPoint>]
+let main argv =
+    argv |> Array.tryHead |> Option.iter run |> ignore
     0 // return an integer exit code
