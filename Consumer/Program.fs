@@ -1,10 +1,14 @@
 ﻿// Learn more about F# at http://fsharp.org
 
+open System.Text
 open FSharp.Control
 open DotPulsar
 open Vulpecula
 
-let printMessage (message: Message) = message.Data.ToString() |> printfn "%s"
+let printMessage (message: Message) =
+    message.Data
+    |> (fun d -> EncodingExtensions.GetString(Encoding.UTF8, &d))
+    |> printfn "%s"
 
 [<EntryPoint>]
 let main argv =
