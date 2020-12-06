@@ -10,6 +10,14 @@ let printMessage (message: Message, id: int) =
     |> (fun d -> EncodingExtensions.GetString(Encoding.UTF8, &d))
     |> printfn "%d: %s" id
 
+let acknowledge (client: Abstractions.IConsumer, message: Message) =
+    async {
+        do! client.Acknowledge(message).AsTask()
+            |> Async.AwaitTask
+
+        return message
+    }
+
 let receiveMessages (options: ConsumerOptions, id: int) =
     let client =
         PulsarClient.Builder().Build().CreateConsumer(options)
@@ -17,6 +25,7 @@ let receiveMessages (options: ConsumerOptions, id: int) =
     printfn "Running %d" id
     client.Messages()
     |> AsyncSeq.ofAsyncEnum
+    |> AsyncSeq.mapAsync (fun m -> acknowledge (client, m))
     |> AsyncSeq.map (fun m -> printMessage (m, id))
 
 let run (mode: string) =
