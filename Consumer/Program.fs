@@ -1,5 +1,6 @@
 ﻿// Learn more about F# at http://fsharp.org
 
+open System
 open System.Text
 open FSharp.Control
 open DotPulsar
@@ -23,10 +24,14 @@ let receiveMessages (options: ConsumerOptions, id: int) =
         PulsarClient.Builder().Build().CreateConsumer(options)
 
     printfn "Running %d" id
+
     client.Messages()
     |> AsyncSeq.ofAsyncEnum
     |> AsyncSeq.mapAsync (fun m -> acknowledge (client, m))
     |> AsyncSeq.map (fun m -> printMessage (m, id))
+    |> ignore
+
+    (id, client)
 
 let run (mode: string) =
     let mode =
@@ -42,11 +47,26 @@ let run (mode: string) =
 
     List.init 5 (fun i -> i)
     |> List.map (fun i -> receiveMessages (options, i))
-    |> AsyncSeq.mergeAll
-    |> AsyncSeq.toArraySynchronously
-    |> ignore
+
+let rec waitTasks (tasks: Map<int, Abstractions.IConsumer>) =
+    let id = Console.ReadLine() |> Convert.ToInt32
+
+    tasks
+    |> Map.tryFind id
+    |> Option.iter (fun token ->
+        printfn "Cancel %d" id
+        token.DisposeAsync().AsTask()
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+        waitTasks (tasks.Remove(id)))
+    waitTasks (tasks)
 
 [<EntryPoint>]
 let main argv =
-    argv |> Array.tryHead |> Option.iter run |> ignore
+    argv
+    |> Array.tryHead
+    |> Option.map run
+    |> Option.map Map.ofList
+    |> Option.iter waitTasks
+
     0 // return an integer exit code
