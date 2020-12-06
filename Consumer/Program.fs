@@ -5,10 +5,19 @@ open FSharp.Control
 open DotPulsar
 open Vulpecula
 
-let printMessage (message: Message) =
+let printMessage (message: Message, id: int) =
     message.Data
     |> (fun d -> EncodingExtensions.GetString(Encoding.UTF8, &d))
-    |> printfn "%s"
+    |> printfn "%d: %s" id
+
+let receiveMessages (options: ConsumerOptions, id: int) =
+    let client =
+        PulsarClient.Builder().Build().CreateConsumer(options)
+
+    printfn "Running %d" id
+    client.Messages()
+    |> AsyncSeq.ofAsyncEnum
+    |> AsyncSeq.map (fun m -> printMessage (m, id))
 
 let run (mode: string) =
     let mode =
@@ -22,12 +31,9 @@ let run (mode: string) =
 
     options.SubscriptionType <- mode
 
-    let client =
-        PulsarClient.Builder().Build().CreateConsumer(options)
-
-    client.Messages()
-    |> AsyncSeq.ofAsyncEnum
-    |> AsyncSeq.map printMessage
+    List.init 5 (fun i -> i)
+    |> List.map (fun i -> receiveMessages (options, i))
+    |> AsyncSeq.mergeAll
     |> AsyncSeq.toArraySynchronously
     |> ignore
 
