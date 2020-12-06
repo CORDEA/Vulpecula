@@ -49,17 +49,20 @@ let run (mode: string) =
     |> List.map (fun i -> receiveMessages (options, i))
 
 let rec waitTasks (tasks: Map<int, Abstractions.IConsumer>) =
-    let id = Console.ReadLine() |> Convert.ToInt32
+    if not tasks.IsEmpty then
+        let id = Console.ReadLine() |> Convert.ToInt32
 
-    tasks
-    |> Map.tryFind id
-    |> Option.iter (fun token ->
-        printfn "Cancel %d" id
-        token.DisposeAsync().AsTask()
-        |> Async.AwaitTask
-        |> Async.RunSynchronously
-        waitTasks (tasks.Remove(id)))
-    waitTasks (tasks)
+        tasks
+        |> Map.tryFind id
+        |> (fun token ->
+            match token with
+            | None -> waitTasks (tasks)
+            | Some token ->
+                printfn "Cancel %d" id
+                token.DisposeAsync().AsTask()
+                |> Async.AwaitTask
+                |> Async.RunSynchronously
+                waitTasks (tasks.Remove(id)))
 
 [<EntryPoint>]
 let main argv =
